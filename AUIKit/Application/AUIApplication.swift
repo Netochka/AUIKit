@@ -19,6 +19,7 @@ public protocol AUIApplication: UIApplicationDelegate where Self: UIApplication 
   func didFinishLaunchingNotification(payload: [AnyHashable: Any])
   func didFinishLaunchingLocation()
   func didFinishLaunchingShortcutItem(_ shortcutItem: UIApplicationShortcutItem)
+  func willOpenURL(_ url: URL)
   
   // MARK: States
   

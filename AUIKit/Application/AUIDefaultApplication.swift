@@ -89,6 +89,15 @@ open class AUIDefaultApplication: UIApplication, AUIApplication {
   open func didFinishLaunchingShortcutItem(_ shortcutItem: UIApplicationShortcutItem) {
     
   }
+  
+  open func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+    willOpenURL(url)
+    return true
+  }
+  
+  open func willOpenURL(_ url: URL) {
+    
+  }
 
   // MARK: States
   
