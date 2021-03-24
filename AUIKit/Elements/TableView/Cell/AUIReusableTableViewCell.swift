@@ -11,6 +11,8 @@ open class AUIReusableTableViewCell: AUITableViewCellView, AUIViewContainerable,
   
   private var createViewBlock: (() -> UIView)?
   private(set) public var containerView: UIView?
+  private var contentInsets: UIEdgeInsets = .zero
+  private var contentHeight: CGFloat? = nil
   
   // MARK: - Public
   
@@ -19,19 +21,24 @@ open class AUIReusableTableViewCell: AUITableViewCellView, AUIViewContainerable,
   }
   
   open func setupUI(insets: UIEdgeInsets = .zero, height: CGFloat? = nil) {
+    contentInsets = insets
+    contentHeight = height
     initContainerViewIfNeeded(insets: insets, height: height)
   }
   
   // MARK: - Private
   
   private func initContainerViewIfNeeded(insets: UIEdgeInsets, height: CGFloat?) {
-    if containerView == nil {
-      guard let createViewBlock = createViewBlock else { return }
-      let createdContainerView = createViewBlock()
-      containerView = createdContainerView
-      contentView.addSubview(createdContainerView)
-      placeContainerView(insets: insets, height: height)
+    if let containerView = containerView {
+      containerView.removeFromSuperview()
+      self.containerView = nil
     }
+    
+    guard let createViewBlock = createViewBlock else { return }
+    let createdContainerView = createViewBlock()
+    containerView = createdContainerView
+    contentView.addSubview(createdContainerView)
+    placeContainerView(insets: insets, height: height)
   }
   
   private func placeContainerView(insets: UIEdgeInsets, height: CGFloat?) {
@@ -89,15 +96,9 @@ open class AUIReusableTableViewCell: AUITableViewCellView, AUIViewContainerable,
     }
   }
   
-  private func needSetupUI() -> Bool {
-    return containerView == nil
-  }
-  
   // MARK: - AUIConfigurableView
   
   open func setupUIIfNeeded() {
-    if needSetupUI() {
-      setupUI()
-    }
+    setupUI(insets: contentInsets, height: contentHeight)
   }
 }

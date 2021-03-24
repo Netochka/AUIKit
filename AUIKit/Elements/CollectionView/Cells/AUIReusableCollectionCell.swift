@@ -52,14 +52,16 @@ open class AUIReusableCollectionCell: UICollectionViewCell, AUIViewContainer {
   }
   
   // MARK: - Private
-  
   private func initContainerViewIfNeeded() {
-    if containerView == nil {
-      guard let createViewBlock = createViewBlock else { return }
-      let createdContainerView = createViewBlock()
-      containerView = createdContainerView
-      contentView.addSubview(createdContainerView)
+    if let containerView = containerView {
+      containerView.removeFromSuperview()
+      self.containerView = nil
     }
+    
+    guard let createViewBlock = createViewBlock else { return }
+    let createdContainerView = createViewBlock()
+    containerView = createdContainerView
+    contentView.addSubview(createdContainerView)
   }
   
   private func placeContainerView(insets: UIEdgeInsets, height: CGFloat?, width: CGFloat?) {
@@ -129,13 +131,7 @@ open class AUIReusableCollectionCell: UICollectionViewCell, AUIViewContainer {
     }
   }
   
-  private func needSetupUI() -> Bool {
-    return containerView == nil
-  }
-  
   open func setupUIIfNeeded() {
-    if needSetupUI() {
-      setupUI()
-    }
+    setupUI()
   }
 }
